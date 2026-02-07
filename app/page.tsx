@@ -44,26 +44,26 @@ export default function Home() {
   const images = [
     {
       src: '/images/slide1.png',
-      title: 'Attine',
+      title: 'Attine.co',
       subtitle:
         'Kami membantu mengubah kebutuhan, gaya hidup, dan visi Anda menjadi konsep arsitektur yang jelas dan terarah.',
     },
     {
       src: '/images/slide2.jpeg',
-      title: 'Attine',
+      title: 'Attine.co',
       subtitle:
         'Gambar kerja kami membantu proses pembangunan berjalan lebih lancar, meminimalkan kesalahan, dan mengontrol biaya.',
     },
     {
       src: '/images/slide3.jpeg',
-      title: 'Attine',
+      title: 'Attine.co',
 
       subtitle:
         'Setiap ruang dirancang agar nyaman digunakan, efisien, dan tetap memiliki nilai visual yang selaras dengan karakter Anda.',
     },
     {
       src: '/images/slide4.jpeg',
-      title: 'Attine',
+      title: 'Attine.co',
       subtitle:
         'Kami memastikan setiap tahap berjalan sesuai konsep desain dan tujuan proyek yang telah disepakati.',
     },
