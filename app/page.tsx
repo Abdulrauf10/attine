@@ -470,7 +470,7 @@ export default function Home() {
             alt="Attine"
             width={350}
             height={350}
-            className="-mt-64"
+            className="-mt-64 -z-30"
           />
           <h2 className="text-center -mt-16 font-bold">
             Silahkan masukkan Luas lahan, luas bangunan, dan <br /> jumlah
