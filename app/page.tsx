@@ -13,8 +13,9 @@ import {
   CarouselPrevious,
   CarouselNext,
 } from '@/components/ui/carousel';
-
+import { motion, AnimatePresence } from 'framer-motion';
 import Image from 'next/image';
+import { Separator } from '@/components/ui/separator';
 
 type SelectedPlan = {
   title: string;
@@ -76,7 +77,7 @@ export default function Home() {
   const ADDON_RATE_RAB = 10_000;
   const ADDON_RATE_SPEC = 5_000;
   const ADDON_RATE_STRUKTUR = 35_000;
-  const ADDON_RATE_ANIMASI = 20_0000;
+  const ADDON_RATE_ANIMASI = 20_000;
   const PERCENT_11 = 0.11;
   const PERCENT_5 = 0.05;
 
@@ -153,6 +154,41 @@ export default function Home() {
   const whatsappUrl = `https://wa.me/6285729003763?text=${encodeURIComponent(
     whatsappMessage,
   )}`;
+
+  const [deck, setDeck] = useState([
+    { title: 'RAB', price: 0 },
+    { title: 'Spesifikasi Teknis', price: 0 },
+    { title: 'Perhitungan Struktur', price: 0 },
+    { title: 'Animasi', price: 0 },
+  ]);
+
+  useEffect(() => {
+    setDeck((prev) =>
+      prev.map((addon) => ({
+        ...addon,
+        price:
+          addon.title === 'RAB'
+            ? addonPriceRab
+            : addon.title === 'Spesifikasi Teknis'
+              ? addonPriceSpec
+              : addon.title === 'Perhitungan Struktur'
+                ? addonPriceStruktur
+                : addon.title === 'Animasi'
+                  ? addonPriceAnimasi
+                  : addon.price,
+      })),
+    );
+  }, [addonPriceRab, addonPriceSpec, addonPriceStruktur, addonPriceAnimasi]);
+
+  const STACK_OFFSET_X = 28;
+  const STACK_SCALE = 0.04;
+
+  const rotateDeck = () => {
+    setDeck((prev) => {
+      const [first, ...rest] = prev;
+      return [...rest, first];
+    });
+  };
 
   return (
     <>
@@ -269,7 +305,7 @@ export default function Home() {
           className="px-6 py-2 rounded-full bg-black text-white font-semibold
              disabled:bg-gray-400 disabled:cursor-not-allowed"
         >
-          Hitung Biaya
+          Submit
         </button>
       </div>
 
@@ -376,59 +412,55 @@ export default function Home() {
             />
           </div>
 
-          <h3 className="text-center mt-20 mb-5 font-bold">ADD-ON</h3>
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-2 md:px-24 px-4 mb-20">
-            <AddonCard
-              title="RAB"
-              price={formatRupiah(addonPriceRab)}
-              selected={selectedAddons.some((a) => a.title === 'RAB')}
-              onSelect={() =>
-                toggleAddon({
-                  title: 'RAB',
-                  price: addonPriceRab,
-                })
-              }
-            />
+          <div className="flex items-center justify-center gap-3 mt-20 mb-5 font-bold h-10">
+            <div className="h-9 w-3 rounded-full bg-yellow-500 " />
+            <h3 className="text-3xl">ADD-ON</h3>
+          </div>
 
-            <AddonCard
-              title="Spesifikasi Teknis"
-              price={formatRupiah(addonPriceSpec)}
-              selected={selectedAddons.some(
-                (a) => a.title === 'Spesifikasi Teknis',
-              )}
-              onSelect={() =>
-                toggleAddon({
-                  title: 'Spesifikasi Teknis',
-                  price: addonPriceSpec,
-                })
-              }
-            />
+          <div className="relative w-full max-w-md mx-auto h-65 mb-20 overflow-visible">
+            <div className="relative px-8.75 md:px-0 h-full">
+              {deck.slice(0, 3).map((addon, i) => {
+                const isTop = i === 0;
+                const isSelected = selectedAddons.some(
+                  (a) => a.title === addon.title,
+                );
 
-            <AddonCard
-              title="Perhitungan Struktur"
-              price={formatRupiah(addonPriceStruktur)}
-              selected={selectedAddons.some(
-                (a) => a.title === 'Perhitungan Struktur',
-              )}
-              onSelect={() =>
-                toggleAddon({
-                  title: 'Perhitungan Struktur',
-                  price: addonPriceStruktur,
-                })
-              }
-            />
-
-            <AddonCard
-              title="Animasi"
-              price={formatRupiah(addonPriceStruktur)}
-              selected={selectedAddons.some((a) => a.title === 'Animasi')}
-              onSelect={() =>
-                toggleAddon({
-                  title: 'Animasi',
-                  price: addonPriceAnimasi,
-                })
-              }
-            />
+                return (
+                  <motion.div
+                    key={addon.title}
+                    className="absolute inset-0"
+                    style={{ zIndex: 10 - i }}
+                    animate={{
+                      x: -i * STACK_OFFSET_X,
+                      scale: 1 - i * STACK_SCALE,
+                    }}
+                    transition={{ type: 'spring', stiffness: 260, damping: 22 }}
+                    drag={isTop ? 'x' : false}
+                    dragConstraints={{ left: 0, right: 0 }}
+                    onDragEnd={(_, info) => {
+                      if (Math.abs(info.offset.x) > 120) {
+                        rotateDeck();
+                      }
+                    }}
+                  >
+                    <div className="px-8.75 md:px-0 h-full">
+                      <AddonCard
+                        title={addon.title}
+                        price={formatRupiah(addon.price)}
+                        selected={isSelected}
+                        onSelect={() => {
+                          toggleAddon({
+                            title: addon.title,
+                            price: addon.price,
+                          });
+                          rotateDeck();
+                        }}
+                      />
+                    </div>
+                  </motion.div>
+                );
+              })}
+            </div>
           </div>
 
           <div>
@@ -467,13 +499,13 @@ export default function Home() {
       ) : (
         <div className="h-[70vh] w-full flex flex-col items-center justify-center">
           <Image
-            src="/images/empty.png"
+            src="/images/bni.png"
             alt="Attine"
             width={350}
             height={350}
-            className="-mt-64 -z-30"
+            className="rounded-2xl shadow-2xl"
           />
-          <h2 className="text-center -mt-16 font-bold">
+          <h2 className="text-center text-2xl font-bold">
             Silahkan masukkan Luas lahan, luas bangunan, dan <br /> jumlah
             lantai bangunan anda.
           </h2>
