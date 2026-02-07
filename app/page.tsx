@@ -505,7 +505,7 @@ export default function Home() {
             height={350}
             className="rounded-2xl shadow-2xl"
           />
-          <h2 className="text-center text-2xl font-bold">
+          <h2 className="text-center text-xl mt-2">
             Silahkan masukkan Luas lahan, luas bangunan, dan <br /> jumlah
             lantai bangunan anda.
           </h2>
