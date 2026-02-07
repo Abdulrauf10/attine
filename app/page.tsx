@@ -5,7 +5,7 @@ import { Field, FieldLabel } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
 import Footer from '@/components/Footer';
 import AddonCard from '@/components/AddOnCard';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
   Carousel,
   CarouselContent,
@@ -30,9 +30,16 @@ type Addon = {
 export default function Home() {
   const [selectedPlan, setSelectedPlan] = useState<SelectedPlan | null>(null);
   const [selectedAddons, setSelectedAddons] = useState<Addon[]>([]);
-  const [luasBangunan, setLuasBangunan] = useState<number>(0);
-  const [jumlahLantai, setJumlahLantai] = useState<number>(0);
-  const [luasLahan, setLuasLahan] = useState<number>(0);
+  const [luasBangunan, setLuasBangunan] = useState<number | null>(null);
+  const [jumlahLantai, setJumlahLantai] = useState<number | null>(null);
+  const [luasLahan, setLuasLahan] = useState<number | null>(null);
+  const [isSubmitted, setIsSubmitted] = useState(false);
+
+  useEffect(() => {
+    setIsSubmitted(false);
+    setSelectedPlan(null);
+    setSelectedAddons([]);
+  }, [luasBangunan, luasLahan, jumlahLantai]);
 
   const images = [
     {
@@ -69,35 +76,34 @@ export default function Home() {
   const ADDON_RATE_RAB = 10_000;
   const ADDON_RATE_SPEC = 5_000;
   const ADDON_RATE_STRUKTUR = 35_000;
-  const MULTIPLIER = 2;
+  const ADDON_RATE_ANIMASI = 20_0000;
   const PERCENT_11 = 0.11;
   const PERCENT_5 = 0.05;
 
-  const baseArea = luasBangunan * jumlahLantai;
+  const baseArea =
+    luasBangunan !== null && jumlahLantai !== null
+      ? luasBangunan * jumlahLantai
+      : 0;
 
   const subscriptionPriceLevel1 =
-    baseArea > 0
-      ? baseArea * SUBSCRIPTION_RATE_LEVEL_1 * MULTIPLIER * PERCENT_11
-      : 0;
+    baseArea > 0 ? baseArea * SUBSCRIPTION_RATE_LEVEL_1 * (1 + PERCENT_11) : 0;
 
   const subscriptionPriceLevel2 =
-    baseArea > 0
-      ? baseArea * SUBSCRIPTION_RATE_LEVEL_2 * MULTIPLIER * PERCENT_11
-      : 0;
+    baseArea > 0 ? baseArea * SUBSCRIPTION_RATE_LEVEL_2 * (1 + PERCENT_11) : 0;
   const subscriptionPriceLevel3 =
-    baseArea > 0
-      ? baseArea * SUBSCRIPTION_RATE_LEVEL_3 * MULTIPLIER * PERCENT_11
-      : 0;
+    baseArea > 0 ? baseArea * SUBSCRIPTION_RATE_LEVEL_3 * (1 + PERCENT_11) : 0;
 
   const subscriptionPriceLevel4 =
     baseArea > 0 ? baseArea * SUBSCRIPTION_RATE_LEVEL_4 * PERCENT_5 : 0;
 
   const addonPriceRab =
-    baseArea > 0 ? baseArea * ADDON_RATE_RAB * MULTIPLIER * PERCENT_11 : 0;
+    baseArea > 0 ? baseArea * ADDON_RATE_RAB * (1 + PERCENT_11) : 0;
   const addonPriceSpec =
-    baseArea > 0 ? baseArea * ADDON_RATE_SPEC * MULTIPLIER * PERCENT_11 : 0;
+    baseArea > 0 ? baseArea * ADDON_RATE_SPEC * (1 + PERCENT_11) : 0;
   const addonPriceStruktur =
-    baseArea > 0 ? baseArea * ADDON_RATE_STRUKTUR * MULTIPLIER * PERCENT_11 : 0;
+    baseArea > 0 ? baseArea * ADDON_RATE_STRUKTUR * (1 + PERCENT_11) : 0;
+  const addonPriceAnimasi =
+    baseArea > 0 ? baseArea * ADDON_RATE_ANIMASI * (1 + PERCENT_11) : 0;
 
   const formatRupiah = (value: number) =>
     new Intl.NumberFormat('id-ID', {
@@ -184,64 +190,89 @@ export default function Home() {
         <CarouselNext className="absolute right-4 top-1/2 z-20 -translate-y-1/2 bg-white/80 hover:bg-white" />
       </Carousel>
 
-      <div className="relative mx-auto flex lg:flex-row md:flex-row flex-col -mt-6 z-999 lg:max-w-150 md:max-w-150 w-full gap-4 bg-white p-3 rounded-2xl shadow">
-        <Field>
-          <FieldLabel htmlFor="input-field-username">
-            Luas lahan (m²)
-          </FieldLabel>
-          <Input
-            type="number"
-            placeholder="Input nilai..."
-            autoFocus={false}
-            value={luasLahan}
-            className="border-gray-300 focus:border-gray-400 focus:ring-0 focus-visible:ring-0"
-            onChange={(e) => setLuasLahan(Number(e.target.value || 0))}
-            onKeyDown={(e) => {
-              if (e.key === '.' || e.key === ',') {
-                e.preventDefault();
+      <div className="w-full mx-auto mt-8 p-3 flex flex-col lg:max-w-150 md:max-w-150 shadow-xl rounded-2xl gap-5">
+        <div className="flex lg:flex-row md:flex-row flex-col w-full gap-4">
+          <Field>
+            <FieldLabel htmlFor="input-field-username">
+              Luas lahan (m²)
+            </FieldLabel>
+            <Input
+              type="number"
+              placeholder="Input nilai..."
+              autoFocus={false}
+              value={luasLahan ?? ''}
+              className="border-gray-300 focus:border-gray-400 focus:ring-0 focus-visible:ring-0"
+              onChange={(e) =>
+                setLuasLahan(
+                  e.target.value === '' ? null : Number(e.target.value),
+                )
               }
-            }}
-          />
-        </Field>
+              onKeyDown={(e) => {
+                if (e.key === '.' || e.key === ',') {
+                  e.preventDefault();
+                }
+              }}
+            />
+          </Field>
 
-        <Field>
-          <FieldLabel htmlFor="input-field-username">
-            Luas bangunan (m²)
-          </FieldLabel>
-          <Input
-            type="number"
-            autoFocus={false}
-            placeholder="Input nilai..."
-            value={luasBangunan}
-            onChange={(e) => setLuasBangunan(Number(e.target.value || 0))}
-            className="border-gray-300 focus:border-gray-400 focus:ring-0 focus-visible:ring-0"
-            onKeyDown={(e) => {
-              if (e.key === '.' || e.key === ',') {
-                e.preventDefault();
+          <Field>
+            <FieldLabel htmlFor="input-field-username">
+              Luas bangunan (m²)
+            </FieldLabel>
+            <Input
+              type="number"
+              autoFocus={false}
+              placeholder="Input nilai..."
+              value={luasBangunan ?? ''}
+              onChange={(e) =>
+                setLuasBangunan(
+                  e.target.value === '' ? null : Number(e.target.value),
+                )
               }
-            }}
-          />
-        </Field>
+              className="border-gray-300 focus:border-gray-400 focus:ring-0 focus-visible:ring-0"
+              onKeyDown={(e) => {
+                if (e.key === '.' || e.key === ',') {
+                  e.preventDefault();
+                }
+              }}
+            />
+          </Field>
 
-        <Field>
-          <FieldLabel htmlFor="input-field-username">Jumlah lantai</FieldLabel>
-          <Input
-            type="number"
-            placeholder="Input nilai..."
-            autoFocus={false}
-            value={jumlahLantai}
-            onChange={(e) => setJumlahLantai(Number(e.target.value || 0))}
-            className="border-gray-300 focus:border-gray-400 focus:ring-0 focus-visible:ring-0"
-            onKeyDown={(e) => {
-              if (e.key === '.' || e.key === ',') {
-                e.preventDefault();
+          <Field>
+            <FieldLabel htmlFor="input-field-username">
+              Jumlah lantai
+            </FieldLabel>
+            <Input
+              type="number"
+              placeholder="Input nilai..."
+              autoFocus={false}
+              value={jumlahLantai ?? ''}
+              onChange={(e) =>
+                setJumlahLantai(
+                  e.target.value === '' ? null : Number(e.target.value),
+                )
               }
-            }}
-          />
-        </Field>
+              className="border-gray-300 focus:border-gray-400 focus:ring-0 focus-visible:ring-0"
+              onKeyDown={(e) => {
+                if (e.key === '.' || e.key === ',') {
+                  e.preventDefault();
+                }
+              }}
+            />
+          </Field>
+        </div>
+
+        <button
+          disabled={!luasBangunan || !luasLahan || !jumlahLantai}
+          onClick={() => setIsSubmitted(true)}
+          className="px-6 py-2 rounded-full bg-black text-white font-semibold
+             disabled:bg-gray-400 disabled:cursor-not-allowed"
+        >
+          Hitung Biaya
+        </button>
       </div>
 
-      {luasBangunan && luasLahan && jumlahLantai ? (
+      {isSubmitted ? (
         <>
           <div className="grid w-full grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 lg:mt-20 mt-20 px-6 lg:px-10 items-stretch">
             <SubscriptionCard
@@ -345,7 +376,7 @@ export default function Home() {
           </div>
 
           <h3 className="text-center mt-20 mb-5 font-bold">ADD-ON</h3>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-5 md:px-24 px-4 mb-20">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-2 md:px-24 px-4 mb-20">
             <AddonCard
               title="RAB"
               price={formatRupiah(addonPriceRab)}
@@ -382,6 +413,18 @@ export default function Home() {
                 toggleAddon({
                   title: 'Perhitungan Struktur',
                   price: addonPriceStruktur,
+                })
+              }
+            />
+
+            <AddonCard
+              title="Animasi"
+              price={formatRupiah(addonPriceStruktur)}
+              selected={selectedAddons.some((a) => a.title === 'Animasi')}
+              onSelect={() =>
+                toggleAddon({
+                  title: 'Animasi',
+                  price: addonPriceAnimasi,
                 })
               }
             />
