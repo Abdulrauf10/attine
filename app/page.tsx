@@ -191,6 +191,7 @@ export default function Home() {
       </Carousel>
 
       <div className="w-full mx-auto mt-8 p-3 flex flex-col lg:max-w-150 md:max-w-150 shadow-xl rounded-2xl gap-5">
+        <h4 className="font-semibold">Silahkan diisi</h4>
         <div className="flex lg:flex-row md:flex-row flex-col w-full gap-4">
           <Field>
             <FieldLabel htmlFor="input-field-username">
