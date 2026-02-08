@@ -15,7 +15,7 @@ import {
 } from '@/components/ui/carousel';
 import { motion, AnimatePresence } from 'framer-motion';
 import Image from 'next/image';
-import { Separator } from '@/components/ui/separator';
+import { Spinner } from '@/components/ui/spinner';
 
 type SelectedPlan = {
   title: string;
@@ -156,10 +156,14 @@ export default function Home() {
   )}`;
 
   const [deck, setDeck] = useState([
-    { title: 'RAB', price: 0 },
-    { title: 'Spesifikasi Teknis', price: 0 },
-    { title: 'Perhitungan Struktur', price: 0 },
-    { title: 'Animasi', price: 0 },
+    { title: 'RAB', price: 0, background: '/images/bni.png' },
+    { title: 'Spesifikasi Teknis', price: 0, background: '/images/slide1.png' },
+    {
+      title: 'Perhitungan Struktur',
+      price: 0,
+      background: '/images/slide2.jpeg',
+    },
+    { title: 'Animasi', price: 0, background: '/images/slide3.jpeg' },
   ]);
 
   useEffect(() => {
@@ -192,7 +196,7 @@ export default function Home() {
 
   return (
     <>
-      <Carousel className="relative w-full">
+      <Carousel className="relative w-full ">
         <CarouselContent>
           {images.map((item, index) => (
             <CarouselItem key={index}>
@@ -212,7 +216,7 @@ export default function Home() {
                     <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold">
                       {item.title}
                     </h1>
-                    <p className="mt-3 max-w-xl text-sm sm:text-base md:text-lg">
+                    <p className="mt-3 max-w-xl text-yellow-400 text-sm sm:text-base md:text-lg">
                       {item.subtitle}
                     </p>
                   </div>
@@ -226,92 +230,118 @@ export default function Home() {
         <CarouselNext className="absolute right-4 top-1/2 z-20 -translate-y-1/2 bg-white/80 hover:bg-white" />
       </Carousel>
 
-      <div className="w-full mx-auto mt-8 p-3 flex flex-col lg:max-w-150 md:max-w-150 shadow-xl rounded-2xl gap-5">
-        <h4 className="font-semibold">Silahkan diisi</h4>
-        <div className="flex lg:flex-row md:flex-row flex-col w-full gap-4">
-          <Field>
-            <FieldLabel htmlFor="input-field-username">
-              Luas lahan (m²)
-            </FieldLabel>
-            <Input
-              type="number"
-              placeholder="Input nilai..."
-              autoFocus={false}
-              value={luasLahan ?? ''}
-              className="border-gray-300 focus:border-gray-400 focus:ring-0 focus-visible:ring-0"
-              onChange={(e) =>
-                setLuasLahan(
-                  e.target.value === '' ? null : Number(e.target.value),
-                )
-              }
-              onKeyDown={(e) => {
-                if (e.key === '.' || e.key === ',') {
-                  e.preventDefault();
-                }
-              }}
-            />
-          </Field>
+      <div className="bg-[#F2F9FC] px-10 py-10 w-full">
+        <div className="w-full mx-auto p-3 flex flex-col lg:max-w-150 md:max-w-150 shadow-xl rounded-2xl gap-5 bg-white">
+          <h4 className="font-semibold text-center">Silahkan diisi</h4>
+          <div className="flex lg:flex-row md:flex-row flex-col w-full gap-4">
+            <div className="flex flex-col justify-center items-center"></div>
+            <Field>
+              <p className="text-center text-sm font-semibold">
+                Luas lahan (m²)
+              </p>
 
-          <Field>
-            <FieldLabel htmlFor="input-field-username">
-              Luas bangunan (m²)
-            </FieldLabel>
-            <Input
-              type="number"
-              autoFocus={false}
-              placeholder="Input nilai..."
-              value={luasBangunan ?? ''}
-              onChange={(e) =>
-                setLuasBangunan(
-                  e.target.value === '' ? null : Number(e.target.value),
-                )
-              }
-              className="border-gray-300 focus:border-gray-400 focus:ring-0 focus-visible:ring-0"
-              onKeyDown={(e) => {
-                if (e.key === '.' || e.key === ',') {
-                  e.preventDefault();
+              <Image
+                src={'/images/slide1.png'}
+                alt="BNI"
+                width={50}
+                height={50}
+                unoptimized
+                className="rounded-2xl"
+              />
+              <Input
+                type="number"
+                placeholder="Input nilai..."
+                autoFocus={false}
+                value={luasLahan ?? ''}
+                className="border-gray-300 focus:border-gray-400 focus:ring-0 focus-visible:ring-0"
+                onChange={(e) =>
+                  setLuasLahan(
+                    e.target.value === '' ? null : Number(e.target.value),
+                  )
                 }
-              }}
-            />
-          </Field>
+                onKeyDown={(e) => {
+                  if (e.key === '.' || e.key === ',') {
+                    e.preventDefault();
+                  }
+                }}
+              />
+            </Field>
 
-          <Field>
-            <FieldLabel htmlFor="input-field-username">
-              Jumlah lantai
-            </FieldLabel>
-            <Input
-              type="number"
-              placeholder="Input nilai..."
-              autoFocus={false}
-              value={jumlahLantai ?? ''}
-              onChange={(e) =>
-                setJumlahLantai(
-                  e.target.value === '' ? null : Number(e.target.value),
-                )
-              }
-              className="border-gray-300 focus:border-gray-400 focus:ring-0 focus-visible:ring-0"
-              onKeyDown={(e) => {
-                if (e.key === '.' || e.key === ',') {
-                  e.preventDefault();
+            <Field>
+              <p className="text-center text-sm font-semibold">
+                Luas bangunan (m²)
+              </p>
+              <Image
+                src={'/images/slide2.jpeg'}
+                alt="BNI"
+                width={50}
+                height={50}
+                unoptimized
+                className="rounded-2xl"
+              />
+              <Input
+                type="number"
+                autoFocus={false}
+                placeholder="Input nilai..."
+                value={luasBangunan ?? ''}
+                onChange={(e) =>
+                  setLuasBangunan(
+                    e.target.value === '' ? null : Number(e.target.value),
+                  )
                 }
-              }}
-            />
-          </Field>
-        </div>
+                className="border-gray-300 focus:border-gray-400 focus:ring-0 focus-visible:ring-0"
+                onKeyDown={(e) => {
+                  if (e.key === '.' || e.key === ',') {
+                    e.preventDefault();
+                  }
+                }}
+              />
+            </Field>
 
-        <button
-          disabled={!luasBangunan || !luasLahan || !jumlahLantai}
-          onClick={() => setIsSubmitted(true)}
-          className="px-6 py-2 rounded-full bg-black text-white font-semibold
+            <Field>
+              <p className="text-center text-sm font-semibold">Jumlah lantai</p>
+              <Image
+                src={'/images/slide3.jpeg'}
+                alt="BNI"
+                width={50}
+                height={50}
+                unoptimized
+                className="rounded-2xl"
+              />
+              <Input
+                type="number"
+                placeholder="Input nilai..."
+                autoFocus={false}
+                value={jumlahLantai ?? ''}
+                onChange={(e) =>
+                  setJumlahLantai(
+                    e.target.value === '' ? null : Number(e.target.value),
+                  )
+                }
+                className="border-gray-300 focus:border-gray-400 focus:ring-0 focus-visible:ring-0"
+                onKeyDown={(e) => {
+                  if (e.key === '.' || e.key === ',') {
+                    e.preventDefault();
+                  }
+                }}
+              />
+            </Field>
+          </div>
+
+          <button
+            disabled={!luasBangunan || !luasLahan || !jumlahLantai}
+            onClick={() => setIsSubmitted(true)}
+            className="px-6 py-2 rounded-2xl bg-[#085870] cursor-pointer text-white font-semibold
              disabled:bg-gray-400 disabled:cursor-not-allowed"
-        >
-          Submit
-        </button>
+          >
+            Submit
+          </button>
+        </div>
       </div>
 
       {isSubmitted ? (
         <>
-          <div className="grid w-full grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 lg:mt-20 mt-20 px-6 lg:px-10 items-stretch">
+          <div className="grid w-full grid-cols-1 bg-[#085870] p-10 md:grid-cols-2 lg:grid-cols-4 gap-6  px-6 lg:px-10 items-stretch">
             <SubscriptionCard
               title="Level 1"
               description="Desain awal berupa denah dan visual 3D untuk membantu memahami konsep bangunan."
@@ -412,99 +442,94 @@ export default function Home() {
             />
           </div>
 
-          <div className="flex items-center justify-center gap-3 mt-20 mb-5 font-bold h-10">
-            <div className="h-9 w-3 rounded-full bg-yellow-500 " />
-            <h3 className="text-3xl">ADD-ON</h3>
-          </div>
-
-          <div className="relative w-full max-w-md mx-auto h-65 mb-20 overflow-visible">
-            <div className="relative px-8.75 md:px-0 h-full">
-              {deck.slice(0, 3).map((addon, i) => {
-                const isTop = i === 0;
-                const isSelected = selectedAddons.some(
-                  (a) => a.title === addon.title,
-                );
-
-                return (
-                  <motion.div
-                    key={addon.title}
-                    className="absolute inset-0"
-                    style={{ zIndex: 10 - i }}
-                    animate={{
-                      x: -i * STACK_OFFSET_X,
-                      scale: 1 - i * STACK_SCALE,
-                    }}
-                    transition={{ type: 'spring', stiffness: 260, damping: 22 }}
-                    drag={isTop ? 'x' : false}
-                    dragConstraints={{ left: 0, right: 0 }}
-                    onDragEnd={(_, info) => {
-                      if (Math.abs(info.offset.x) > 120) {
-                        rotateDeck();
-                      }
-                    }}
-                  >
-                    <div className="px-8.75 md:px-0 h-full">
-                      <AddonCard
-                        title={addon.title}
-                        price={formatRupiah(addon.price)}
-                        selected={isSelected}
-                        onSelect={() => {
-                          toggleAddon({
-                            title: addon.title,
-                            price: addon.price,
-                          });
-                          rotateDeck();
-                        }}
-                      />
-                    </div>
-                  </motion.div>
-                );
-              })}
+          <div className="bg-white p-10">
+            <div className="flex items-center justify-center gap-3 mb-5 font-bold h-10">
+              <div className="h-9 w-3 rounded-full bg-yellow-500 " />
+              <h3 className="text-3xl">ADD-ON</h3>
             </div>
-          </div>
 
-          <div>
-            <a
-              href={whatsappUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className={`flex items-center gap-3 max-w-75 mx-auto mb-10 rounded-full px-6 py-2 text-white shadow-lg transition
-      ${
-        !selectedPlan
-          ? 'bg-gray-400 cursor-not-allowed'
-          : 'bg-green-500 hover:bg-green-600'
-      }`}
-              onClick={(e) => {
-                if (!selectedPlan) e.preventDefault();
-              }}
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 32 32"
-                width="50"
-                height="50"
-                fill="currentColor"
+            <div className="relative w-full max-w-md md:mx-auto mr-auto h-65 mb-20 overflow-visible">
+              <div className="relative px-8.75 md:px-0 h-full">
+                {deck.slice(0, 3).map((addon, i) => {
+                  const isTop = i === 0;
+                  const isSelected = selectedAddons.some(
+                    (a) => a.title === addon.title,
+                  );
+
+                  return (
+                    <motion.div
+                      key={addon.title}
+                      className="absolute inset-0"
+                      style={{ zIndex: 10 - i }}
+                      animate={{
+                        x: -i * STACK_OFFSET_X,
+                        scale: 1 - i * STACK_SCALE,
+                      }}
+                      transition={{
+                        type: 'spring',
+                        stiffness: 260,
+                        damping: 22,
+                      }}
+                      drag={isTop ? 'x' : false}
+                      dragConstraints={{ left: 0, right: 0 }}
+                      onDragEnd={(_, info) => {
+                        if (Math.abs(info.offset.x) > 120) {
+                          rotateDeck();
+                        }
+                      }}
+                    >
+                      <div className="pl-14 pr-3 md:px-0 h-full">
+                        <AddonCard
+                          title={addon.title}
+                          price={formatRupiah(addon.price)}
+                          selected={isSelected}
+                          background={addon.background}
+                          onSelect={() => {
+                            toggleAddon({
+                              title: addon.title,
+                              price: addon.price,
+                            });
+                            rotateDeck();
+                          }}
+                        />
+                      </div>
+                    </motion.div>
+                  );
+                })}
+              </div>
+            </div>
+
+            {isSubmitted && selectedPlan && (
+              <a
+                href={whatsappUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={`fixed bottom-0 right-0 mr-6 mb-16 cursor-pointer flex items-center  rounded-full p-2.5 z-999 text-white shadow-lg transition
+              ${
+                !selectedPlan
+                  ? 'bg-gray-400 cursor-not-allowed'
+                  : 'bg-green-500 hover:bg-green-600'
+              }`}
+                onClick={(e) => {
+                  if (!selectedPlan) e.preventDefault();
+                }}
               >
-                <path d="M19.11 17.79c-.29-.14-1.71-.84-1.97-.94-.26-.1-.45-.14-.64.14-.19.29-.74.94-.91 1.13-.17.19-.33.21-.62.07-.29-.14-1.22-.45-2.33-1.43-.86-.77-1.44-1.72-1.61-2.01-.17-.29-.02-.45.13-.59.13-.13.29-.33.43-.5.14-.17.19-.29.29-.48.1-.19.05-.36-.02-.5-.07-.14-.64-1.54-.88-2.11-.23-.55-.47-.48-.64-.49-.17-.01-.36-.01-.55-.01-.19 0-.5.07-.76.36-.26.29-1 1-1 2.44 0 1.44 1.03 2.83 1.17 3.02.14.19 2.03 3.1 4.92 4.35.69.3 1.23.48 1.65.61.69.22 1.31.19 1.8.12.55-.08 1.71-.7 1.95-1.38.24-.67.24-1.25.17-1.38-.07-.13-.26-.21-.55-.36z" />
-              </svg>
-
-              <span className="font-semibold">
-                {selectedPlan
-                  ? 'Chat via WhatsApp'
-                  : 'Silahkan Pilih Paket dulu'}
-              </span>
-            </a>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 32 32"
+                  width="50"
+                  height="50"
+                  fill="currentColor"
+                >
+                  <path d="M19.11 17.79c-.29-.14-1.71-.84-1.97-.94-.26-.1-.45-.14-.64.14-.19.29-.74.94-.91 1.13-.17.19-.33.21-.62.07-.29-.14-1.22-.45-2.33-1.43-.86-.77-1.44-1.72-1.61-2.01-.17-.29-.02-.45.13-.59.13-.13.29-.33.43-.5.14-.17.19-.29.29-.48.1-.19.05-.36-.02-.5-.07-.14-.64-1.54-.88-2.11-.23-.55-.47-.48-.64-.49-.17-.01-.36-.01-.55-.01-.19 0-.5.07-.76.36-.26.29-1 1-1 2.44 0 1.44 1.03 2.83 1.17 3.02.14.19 2.03 3.1 4.92 4.35.69.3 1.23.48 1.65.61.69.22 1.31.19 1.8.12.55-.08 1.71-.7 1.95-1.38.24-.67.24-1.25.17-1.38-.07-.13-.26-.21-.55-.36z" />
+                </svg>
+              </a>
+            )}
           </div>
         </>
       ) : (
-        <div className="h-[70vh] w-full flex flex-col items-center justify-center">
-          <Image
-            src="/images/bni.png"
-            alt="Attine"
-            width={350}
-            height={350}
-            className="rounded-2xl shadow-2xl"
-          />
+        <div className="h-[30vh] bg-white w-full flex flex-col items-center justify-center">
+          <Spinner className="size-8" />
           <h2 className="text-center text-xl mt-2">
             Silahkan masukkan Luas lahan, luas bangunan, dan <br /> jumlah
             lantai bangunan anda.

@@ -33,7 +33,7 @@ export default function SubscriptionCard({
                  flex flex-col"
     >
       {highlighted && (
-        <span className="absolute right-4 top-4 rounded-full bg-indigo-600 px-3 py-1 text-xs font-semibold text-white">
+        <span className="absolute right-4 top-4 rounded-full bg-yellow-400 px-3 py-1 text-xs font-semibold text-black">
           Most Popular
         </span>
       )}
@@ -50,7 +50,6 @@ export default function SubscriptionCard({
 
       <div className="my-6 h-px bg-gray-200" />
 
-      {/* Growable content */}
       <ul className="space-y-3 flex-1">
         {features?.map((feature, index) => (
           <li key={index} className="flex gap-2 text-sm">
@@ -60,14 +59,13 @@ export default function SubscriptionCard({
         ))}
       </ul>
 
-      {/* Button ALWAYS inside card */}
       <button
         type="button"
         onClick={onSelect}
         className={`mt-6 w-full rounded-xl px-4 py-3 text-sm font-semibold
           ${
             selected
-              ? 'bg-indigo-600 text-white'
+              ? 'bg-[#085870] text-white'
               : 'bg-gray-100 hover:bg-gray-200'
           }
         `}

@@ -14,17 +14,17 @@ function Footer() {
             </p>
           </div>
 
-          {/* Links */}
           <div className="flex flex-col gap-4 text-sm md:flex-row md:gap-10">
             <a
               href="tel:+123456789"
+              target="_blank"
               className="hover:text-white transition-colors"
             >
               Contact
             </a>
 
             <a
-              href="https://instagram.com/yourprofile"
+              href="https://instagram.com/attine.co"
               target="_blank"
               className="hover:text-white transition-colors"
             >
@@ -43,7 +43,7 @@ function Footer() {
         <div className="my-8 h-px bg-stone-700" />
 
         <p className="text-center text-xs text-stone-500 tracking-wide">
-          © {new Date().getFullYear()} Attine. All rights reserved.
+          © {new Date().getFullYear()} Attine.co. All rights reserved.
         </p>
       </div>
     </footer>
