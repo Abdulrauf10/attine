@@ -13,7 +13,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: 'Atttine',
+  title: 'Atttine.co',
   description: 'Jasa desain arsitektur',
 };
 
