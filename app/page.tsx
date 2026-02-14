@@ -13,7 +13,7 @@ import {
   CarouselPrevious,
   CarouselNext,
 } from '@/components/ui/carousel';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, Variants } from 'framer-motion';
 import Image from 'next/image';
 import { Spinner } from '@/components/ui/spinner';
 
@@ -194,6 +194,30 @@ export default function Home() {
     });
   };
 
+  const containerVariants: Variants = {
+    hidden: {},
+    show: {
+      transition: {
+        staggerChildren: 0.15,
+      },
+    },
+  };
+
+  const itemVariants: Variants = {
+    hidden: {
+      opacity: 0,
+      y: 40,
+    },
+    show: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: 0.6,
+        ease: 'easeOut', // sekarang aman
+      },
+    },
+  };
+
   return (
     <>
       <Carousel className="relative w-full ">
@@ -213,9 +237,19 @@ export default function Home() {
 
                 <div className="relative z-10 flex h-full items-center justify-center px-4 text-center text-white">
                   <div>
-                    <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold">
-                      {item.title}
-                    </h1>
+                    <div className="flex justify-center items-center gap-2">
+                      <Image
+                        src={'/images/icon.jpeg'}
+                        alt="attines"
+                        width={40}
+                        height={40}
+                        className="rounded-xl"
+                      />
+                      <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold">
+                        {item.title}
+                      </h1>
+                    </div>
+
                     <p className="mt-3 max-w-xl text-yellow-400 text-sm sm:text-base md:text-lg">
                       {item.subtitle}
                     </p>
@@ -341,106 +375,120 @@ export default function Home() {
 
       {isSubmitted ? (
         <>
-          <div className="grid w-full grid-cols-1 bg-[#085870] p-10 md:grid-cols-2 lg:grid-cols-4 gap-6  px-6 lg:px-10 items-stretch">
-            <SubscriptionCard
-              title="Level 1"
-              description="Desain awal berupa denah dan visual 3D untuk membantu memahami konsep bangunan."
-              features={[
-                'Gambar denah',
-                '3D Eksterior',
-                '3D Interior Ruang Inti',
-              ]}
-              selected={selectedPlan?.title === 'Level 1'}
-              onSelect={() =>
-                setSelectedPlan({
-                  title: 'Level 1',
-                  price: subscriptionPriceLevel1,
-                  formattedPrice: formatRupiah(subscriptionPriceLevel1),
-                })
-              }
-              price={formatRupiah(subscriptionPriceLevel1)}
-            />
+          <motion.div
+            variants={containerVariants}
+            initial="hidden"
+            whileInView="show"
+            viewport={{ once: true, amount: 0.2 }}
+            className="grid w-full grid-cols-1 bg-[#085870] p-10 md:grid-cols-2 lg:grid-cols-4 gap-6 px-6 lg:px-10 items-stretch"
+          >
+            <motion.div variants={itemVariants} className="h-full">
+              <SubscriptionCard
+                title="Level 1"
+                description="Desain awal berupa denah dan visual 3D untuk membantu memahami konsep bangunan."
+                features={[
+                  'Gambar denah',
+                  '3D Eksterior',
+                  '3D Interior Ruang Inti',
+                ]}
+                selected={selectedPlan?.title === 'Level 1'}
+                onSelect={() =>
+                  setSelectedPlan({
+                    title: 'Level 1',
+                    price: subscriptionPriceLevel1,
+                    formattedPrice: formatRupiah(subscriptionPriceLevel1),
+                  })
+                }
+                price={formatRupiah(subscriptionPriceLevel1)}
+              />
+            </motion.div>
 
-            <SubscriptionCard
-              title="Level 2"
-              description="Desain arsitektur dengan gambar teknis dasar dan visual 3D seluruh ruang."
-              features={[
-                'Gambar denah',
-                'Gambar Tampak',
-                'Gambar Potongan',
-                '3D Eksterior',
-                '3D Interior Semua Ruang',
-              ]}
-              selected={selectedPlan?.title === 'Level 2'}
-              onSelect={() =>
-                setSelectedPlan({
-                  title: 'Level 2',
-                  price: subscriptionPriceLevel2,
-                  formattedPrice: formatRupiah(subscriptionPriceLevel2),
-                })
-              }
-              price={formatRupiah(subscriptionPriceLevel2)}
-            />
+            <motion.div variants={itemVariants} className="h-full">
+              <SubscriptionCard
+                title="Level 2"
+                description="Desain arsitektur dengan gambar teknis dasar dan visual 3D seluruh ruang."
+                features={[
+                  'Gambar denah',
+                  'Gambar Tampak',
+                  'Gambar Potongan',
+                  '3D Eksterior',
+                  '3D Interior Semua Ruang',
+                ]}
+                selected={selectedPlan?.title === 'Level 2'}
+                onSelect={() =>
+                  setSelectedPlan({
+                    title: 'Level 2',
+                    price: subscriptionPriceLevel2,
+                    formattedPrice: formatRupiah(subscriptionPriceLevel2),
+                  })
+                }
+                price={formatRupiah(subscriptionPriceLevel2)}
+              />
+            </motion.div>
 
-            <SubscriptionCard
-              title="Level 3"
-              highlighted
-              description="Gambar kerja lengkap arsitektur, struktur, dan MEP sebagai acuan pembangunan."
-              price={formatRupiah(subscriptionPriceLevel3)}
-              features={[
-                'Gambar denah',
-                'Gambar Tampak',
-                'Gambar Potongan',
-                'Gambar Rencana Arsitektur',
-                'Gambar Detail Arsitektur',
-                'Gambar Rencana Struktur',
-                'Gambar Detail Struktur',
-                'Gambar Rencana MEP',
-                'Gambar Detail MEP',
-                '3D Eksterior',
-                '3D Interior Semua Ruang',
-              ]}
-              selected={selectedPlan?.title === 'Level 3'}
-              onSelect={() =>
-                setSelectedPlan({
-                  title: 'Level 3',
-                  price: subscriptionPriceLevel3,
-                  formattedPrice: formatRupiah(subscriptionPriceLevel3),
-                })
-              }
-            />
+            <motion.div variants={itemVariants} className="h-full">
+              <SubscriptionCard
+                title="Level 3"
+                highlighted
+                description="Gambar kerja lengkap arsitektur, struktur, dan MEP sebagai acuan pembangunan."
+                price={formatRupiah(subscriptionPriceLevel3)}
+                features={[
+                  'Gambar denah',
+                  'Gambar Tampak',
+                  'Gambar Potongan',
+                  'Gambar Rencana Arsitektur',
+                  'Gambar Detail Arsitektur',
+                  'Gambar Rencana Struktur',
+                  'Gambar Detail Struktur',
+                  'Gambar Rencana MEP',
+                  'Gambar Detail MEP',
+                  '3D Eksterior',
+                  '3D Interior Semua Ruang',
+                ]}
+                selected={selectedPlan?.title === 'Level 3'}
+                onSelect={() =>
+                  setSelectedPlan({
+                    title: 'Level 3',
+                    price: subscriptionPriceLevel3,
+                    formattedPrice: formatRupiah(subscriptionPriceLevel3),
+                  })
+                }
+              />
+            </motion.div>
 
-            <SubscriptionCard
-              title="Level 4"
-              description="Layanan lengkap dari desain, biaya, hingga pengawasan dan manajemen konstruksi."
-              price={formatRupiah(subscriptionPriceLevel4)}
-              features={[
-                'Gambar denah',
-                'Gambar Tampak',
-                'Gambar Potongan',
-                'Gambar Rencana Arsitektur',
-                'Gambar Detail Arsitektur',
-                'Gambar Rencana Struktur',
-                'Gambar Detail Struktur',
-                'Gambar Rencana MEP',
-                'Gambar Detail MEP',
-                '3D Eksterior',
-                '3D Interior Semua Ruang',
-                'Spesifikasi Teknis',
-                'RAB',
-                'Pengawasan Berkala',
-                'Manajemen Konstruksi',
-              ]}
-              selected={selectedPlan?.title === 'Level 4'}
-              onSelect={() =>
-                setSelectedPlan({
-                  title: 'Level 4',
-                  price: subscriptionPriceLevel4,
-                  formattedPrice: formatRupiah(subscriptionPriceLevel4),
-                })
-              }
-            />
-          </div>
+            <motion.div variants={itemVariants} className="h-full">
+              <SubscriptionCard
+                title="Level 4"
+                description="Layanan lengkap dari desain, biaya, hingga pengawasan dan manajemen konstruksi."
+                price={formatRupiah(subscriptionPriceLevel4)}
+                features={[
+                  'Gambar denah',
+                  'Gambar Tampak',
+                  'Gambar Potongan',
+                  'Gambar Rencana Arsitektur',
+                  'Gambar Detail Arsitektur',
+                  'Gambar Rencana Struktur',
+                  'Gambar Detail Struktur',
+                  'Gambar Rencana MEP',
+                  'Gambar Detail MEP',
+                  '3D Eksterior',
+                  '3D Interior Semua Ruang',
+                  'Spesifikasi Teknis',
+                  'RAB',
+                  'Pengawasan Berkala',
+                  'Manajemen Konstruksi',
+                ]}
+                selected={selectedPlan?.title === 'Level 4'}
+                onSelect={() =>
+                  setSelectedPlan({
+                    title: 'Level 4',
+                    price: subscriptionPriceLevel4,
+                    formattedPrice: formatRupiah(subscriptionPriceLevel4),
+                  })
+                }
+              />
+            </motion.div>
+          </motion.div>
 
           <div className="bg-white p-10">
             <div className="flex items-center justify-center gap-3 mb-5 font-bold h-10">

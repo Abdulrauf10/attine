@@ -30,7 +30,7 @@ export default function SubscriptionCard({
                  transition-all duration-300 ease-out
                  hover:-translate-y-2
                  hover:shadow-[0_25px_60px_rgba(0,0,0,0.15)]
-                 flex flex-col"
+                 flex flex-col h-full"
     >
       {highlighted && (
         <span className="absolute right-4 top-4 rounded-full bg-yellow-400 px-3 py-1 text-xs font-semibold text-black">
